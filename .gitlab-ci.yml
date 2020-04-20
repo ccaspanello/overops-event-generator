@@ -10,11 +10,6 @@ test:
     paths:
       - takipi/log/
   script:
-    - echo OVEROPS_API_KEY=${OVEROPS_API_KEY}
-    - echo OVEROPS_API_KEY=${OVEROPS_BACKEND_URL}
-    - echo OVEROPS_ENVIRONMENT_ID=${OVEROPS_ENVIRONMENT_ID}
-    - echo TAKIPI_COLLECTOR_HOST=${TAKIPI_COLLECTOR_HOST}
-    - echo TAKIPI_COLLECTOR_PORT=${TAKIPI_COLLECTOR_PORT}
     - wget -q --content-disposition https://app.overops.com/app/download?t=sa-tgz
     - tar xvzf takipi-agent-*.tar.gz
     - rm takipi-agent-*.tar.gz
@@ -40,13 +35,6 @@ overops:
     expire_in: 90 days
   script:
     - mkdir overops-quality-report
-    - >
-      echo curl 
-      --header "x-api-key: ${OVEROPS_API_KEY}" 
-      --header "overops-environmentId: ${OVEROPS_ENVIRONMENT_ID}" 
-      --data "query={applicationName: ${CI_PROJECT_NAME}, deploymentName: job-${CI_COMMIT_SHORT_SHA}, debug: true, newEvents: true, resurfacedErrors: true}" 
-      --request POST 
-      --url  ${OVEROPS_BACKEND_URL}/report > overops-quality-report/report.html
     - >
       curl 
       --header "x-api-key: ${OVEROPS_API_KEY}" 
