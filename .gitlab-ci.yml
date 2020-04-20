@@ -1,0 +1,56 @@
+image: openjdk:8-jdk
+
+test:
+  stage: test
+  services:
+    - openjdk:8
+  artifacts:
+    name: "TestRunnerLogs"
+    when: always
+    paths:
+      - takipi/log/
+  script:
+    - echo OVEROPS_API_KEY=${OVEROPS_API_KEY}
+    - echo OVEROPS_API_KEY=${OVEROPS_BACKEND_URL}
+    - echo OVEROPS_ENVIRONMENT_ID=${OVEROPS_ENVIRONMENT_ID}
+    - echo TAKIPI_COLLECTOR_HOST=${TAKIPI_COLLECTOR_HOST}
+    - echo TAKIPI_COLLECTOR_PORT=${TAKIPI_COLLECTOR_PORT}
+    - wget -q --content-disposition https://app.overops.com/app/download?t=sa-tgz
+    - tar xvzf takipi-agent-*.tar.gz
+    - rm takipi-agent-*.tar.gz
+  
+    - echo takipi.deployment.name=job-${CI_COMMIT_SHORT_SHA} > takipi/agent.properties
+    - echo takipi.application.name=${CI_PROJECT_NAME} >> takipi/agent.properties
+    - echo takipi.collector.host=${TAKIPI_COLLECTOR_HOST} >> takipi/agent.properties
+    - echo takipi.collector.port=${TAKIPI_COLLECTOR_PORT} >> takipi/agent.properties
+    - echo shutdownGraceTime=20000 >> takipi/agent.properties
+  
+    - ./mvnw -DargLine=-agentpath:./takipi/lib/libTakipiAgent.so test
+
+overops:
+  stage: test
+  when: on_success
+  allow_failure: false
+  artifacts:
+    name: "OverOps-Quality-Report-Job-$CI_JOB_ID"
+    when: always
+    paths:
+      - overops-quality-report/
+    untracked: true
+    expire_in: 90 days
+  script:
+    - mkdir overops-quality-report
+    - >
+      echo curl 
+      --header "x-api-key: ${OVEROPS_API_KEY}" 
+      --header "overops-environmentId: ${OVEROPS_ENVIRONMENT_ID}" 
+      --data "query={applicationName: ${CI_PROJECT_NAME}, deploymentName: job-${CI_COMMIT_SHORT_SHA}, debug: true, newEvents: true, resurfacedErrors: true}" 
+      --request POST 
+      --url  ${OVEROPS_BACKEND_URL}/report > overops-quality-report/report.html
+    - >
+      curl 
+      --header "x-api-key: ${OVEROPS_API_KEY}" 
+      --header "overops-environmentId: ${OVEROPS_ENVIRONMENT_ID}" 
+      --data "query={applicationName: ${CI_PROJECT_NAME}, deploymentName: job-${CI_COMMIT_SHORT_SHA}, debug: true, newEvents: true, resurfacedErrors: true}" 
+      --request POST 
+      --url  ${OVEROPS_BACKEND_URL}/report > overops-quality-report/report.html
