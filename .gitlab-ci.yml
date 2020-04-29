@@ -35,4 +35,5 @@ overops:
     expire_in: 90 days
   script:
     - mkdir overops-quality-report
+    - chmod +x quality-report.sh
     - ./quality-report.sh
