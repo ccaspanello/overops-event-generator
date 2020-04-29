@@ -35,9 +35,4 @@ overops:
     expire_in: 90 days
   script:
     - mkdir overops-quality-report
-    - >
-      curl 
-      --header "x-api-key: ${OVEROPS_API_KEY}" 
-      --data "query={applicationName: event-generator, serviceId: ${OVEROPS_ENVIRONMENT_ID}, deploymentName: deployment1, debug: true, newEvents: true, resurfacedErrors: true}" 
-      --request POST 
-      --url  ${OVEROPS_BACKEND_URL}/report/v1 > overops-quality-report/report.html
+    - ./quality-report.sh
