@@ -25,6 +25,7 @@ public class XmlParseService extends AbstractEventService {
 			return;
 		}
 
+		// Some Comment
 		try {
 			Random random = new Random();
 			int r = random.nextInt(5) + 1;
