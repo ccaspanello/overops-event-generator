@@ -27,10 +27,8 @@ public class HttpService extends AbstractEventService {
             HttpClient client = HttpClientBuilder.create().build();
 
             String uri = builder.toUriString();
-            log.debug("CJC calling uri = {}", uri);
             HttpResponse res = client.execute(new HttpGet(uri));
             int statusCode = res.getStatusLine().getStatusCode();
-            log.debug("CJC status code = {}", statusCode);
 
         } catch (IOException e) {
             log.debug("CJC: {}", e.getMessage(), e);
