@@ -30,7 +30,7 @@ public class HttpService extends AbstractEventService {
 
             log.debug("calling uri = {}", uri);
 
-            HttpResponse response = client.execute(new HttpGet(uri));
+            HttpResponse response = client.execute(new HttpGet("something bad"));
             int statusCode = response.getStatusLine().getStatusCode();
 
             log.debug("status code = {}", statusCode);
