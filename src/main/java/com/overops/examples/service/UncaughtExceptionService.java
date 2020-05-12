@@ -27,8 +27,9 @@ public class UncaughtExceptionService extends AbstractEventService {
             */
 
             log.debug("this thread will die with an uncaught exception");
+            log.info("CJC");
 
-            throw new ExampleUncaughtException("this exception is uncaught and a BIG potential problem");
+            throw new ExampleUncaughtException("CJC - this exception is uncaught and a BIG potential problem");
 
         });
     }
