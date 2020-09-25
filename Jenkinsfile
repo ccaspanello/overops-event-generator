@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Download Agent') {
       steps {
-        sh '''curl https://app.overops.com/app/download?t=sa-tgz | tar -xz 
+        sh '''curl -L https://app.overops.com/app/download?t=sa-tgz | tar -xz 
 '''
       }
     }
