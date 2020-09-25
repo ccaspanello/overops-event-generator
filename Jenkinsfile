@@ -1,7 +1,7 @@
 pipeline {
   agent {
-    docker {
-      image 'overops/collector'
+    dockerfile {
+      filename 'Dockerfile'
     }
 
   }
