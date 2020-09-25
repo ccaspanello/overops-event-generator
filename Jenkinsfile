@@ -8,8 +8,10 @@ pipeline {
   stages {
     stage('Download Agent') {
       steps {
-        sh '''curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-latest.tar.gz | tar -xz 
-'''
+        sh '''yum -y install wget
+wget --content-disposition https://app.overops.com/app/download?t=sa-tgz
+tar -xzf  takipi-agent-*.tar.gz
+rm takipi-agent*%'''
       }
     }
 
