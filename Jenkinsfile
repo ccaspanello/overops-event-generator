@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Build & Test') {
       steps {
-        sh '#./mvnw clean install'
+        sh './mvnw clean install'
       }
     }
 
