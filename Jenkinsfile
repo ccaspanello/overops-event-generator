@@ -11,7 +11,7 @@ pipeline {
     stage('Build & Test') {
       steps {
         withMaven(){
-          sh 'mvn clean package'
+          sh 'mvn clean package -DskipTests'
         }
 
       }
