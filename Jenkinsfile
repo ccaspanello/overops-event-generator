@@ -11,10 +11,10 @@ pipeline {
     stage('Build & Test') {
       steps {
         withMaven(){
-          sh 'mvn clean install'
+          sh 'mvn clean package'
         }
+
       }
     }
-
   }
 }
